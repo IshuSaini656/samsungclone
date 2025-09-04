@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login / Sign Up</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap");
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 90vh;
+    }
+
+    form {
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      width: 40vw;
+      min-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      /* box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05); */
+    }
+
+    h2 {
+      text-align: center;
+      font-weight: 600;
+      font-size: 2rem;
+      color: #000000;
+    }
+
+    h4 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #000000;
+    }
+
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .input-wrapper input {
+      border: none;
+      border-bottom: 1px solid rgb(141, 139, 139);
+      padding: 1.25rem 0.75rem 0.5rem;
+      font-size: 1rem;
+      width: 100%;
+      outline: none;
+      background: transparent;
+    }
+
+    .input-wrapper label {
+      position: absolute;
+      left: 0.75rem;
+      top: 1rem;
+      color: #999;
+      font-size: 1rem;
+      pointer-events: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-wrapper input:focus + label,
+    .input-wrapper input:not(:placeholder-shown):valid + label {
+      top: 0.2rem;
+      font-size: 0.75rem;
+      color: #0768f0;
+    }
+
+    .switch-login {
+      text-align: right;
+      color: #0768f0;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #444;
+    }
+
+    .checkbox-container input {
+      margin-top: 0.15rem;
+    }
+
+    button {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 20px;
+      background-color: #000000;
+      color: white;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    button:active {
+      background-color: #0358c0;
+    }
+
+    .samsung-login {
+      background-color: #1336fd;
+    }
+
+    .samsung-login:active {
+      background-color: #0f1f7d;
+    }
+
+    .disclaimer {
+      font-size: 0.75rem;
+      color: #777;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .disclaimer > a {
+      color: #3150fe;
+    }
+
+    @media (max-width: 500px) {
+      form {
+        padding: 2rem 1.2rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      h4 {
+        font-size: 0.9rem;
+      }
+
+      button {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <form id="login-form">
+    <h2>Login</h2>
+    <h4>Login with mobile to become a member</h4>
+
+    <div class="input-wrapper" id="input-container">
+      <input type="tel" id="login" placeholder=" " required />
+      <label for="login">Mobile Number</label>
+    </div>
+
+    <div class="switch-login" id="switch-login">Login via email ID?</div>
+
+    <div class="checkbox-container">
+      <input type="checkbox" id="confirmation" />
+      <label for="confirmation">
+        I agree to receive personalized offers and updates. You can opt out anytime by visiting My Page.
+      </label>
+    </div>
+
+    <button type="submit" id="otp-btn" disabled>Login via number</button>
+    <button type="button" class="samsung-login">Login via Samsung Account</button>
+
+    <div class="disclaimer">
+      By logging in, I consent and accept the Smart Club Program and Enrollment
+      <a href="#">Terms and Conditions</a> &
+      <a href="#">Privacy Policy.</a>
+    </div>
+  </form>
+
+  <script>
+    const otpBtn = document.getElementById("otp-btn");
+    const switchLogin = document.getElementById("switch-login");
+    const checkbox = document.getElementById("confirmation");
+    const form = document.getElementById("login-form");
+
+    let usingMobile = true;
+    let inputContainer = document.getElementById("input-container");
+    let input = document.getElementById("login");
+
+    function validate() {
+      const value = input.value.trim();
+      const isChecked = checkbox.checked;
+
+      if (usingMobile) {
+        const isValid = /^\d{10}$/.test(value);
+        otpBtn.disabled = !(isValid && isChecked);
+      } else {
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        otpBtn.disabled = !(isValidEmail && isChecked);
+      }
+    }
+
+    input.addEventListener("input", validate);
+    checkbox.addEventListener("change", validate);
+
+    otpBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      const value = input.value.trim();
+      const isChecked = checkbox.checked;
+
+      if (usingMobile) {
+        const isValid = /^\d{10}$/.test(value);
+        if (!isValid || !isChecked) {
+          alert("Please enter a valid 10-digit mobile number and agree to terms.");
+          return;
+        }
+        alert("Logged in with mobile number!");
+      } else {
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        if (!isValidEmail || !isChecked) {
+          alert("Please enter a valid email and agree to terms.");
+          return;
+        }
+        alert("Logged in with email!");
+      }
+    });
+
+    switchLogin.addEventListener("click", () => {
+      const newInputWrapper = document.createElement("div");
+      newInputWrapper.className = "input-wrapper";
+
+      if (usingMobile) {
+        newInputWrapper.innerHTML = `
+          <input type="email" id="login" placeholder=" " required />
+          <label for="login">Email Address</label>
+        `;
+        switchLogin.textContent = "Login via mobile number?";
+        otpBtn.textContent = "Login via Email";
+      } else {
+        newInputWrapper.innerHTML = `
+          <input type="tel" id="login" placeholder=" " required />
+          <label for="login">Mobile Number</label>
+        `;
+        switchLogin.textContent = "Login via email ID?";
+        otpBtn.textContent = "Login via Number";
+      }
+
+      inputContainer.replaceWith(newInputWrapper);
+      inputContainer = newInputWrapper;
+      inputContainer.id = "input-container";
+      input = inputContainer.querySelector("input");
+      usingMobile = !usingMobile;
+
+      input.addEventListener("input", validate);
+      validate();
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+    });
+
+    otpBtn.disabled = true;
+  </script>
+</body>
+</html>
