@@ -1372,7 +1372,7 @@ li {
     left: 19vw;
     font-size: 9vw;
     font-weight: 700;
-    z-index: 1;
+    z-index: 0;
     animation: block1Div 1.5s linear 1;
   }
   .block1::after {
@@ -1386,7 +1386,7 @@ li {
     position: absolute;
     top: 18vw;
     left: 35vw;
-    z-index: 2;
+    z-index: 0;
     animation: block1Div 1.7s linear 1;
   }
 
@@ -1807,3 +1807,4 @@ footer {
   }
   
 }
+
